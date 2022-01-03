@@ -20,7 +20,7 @@ public class Game extends Canvas implements Runnable {
 	public static final int WIDTH = 256;
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int SCALE = 4;
-	public static final String NAME = "test";
+	public static final String NAME = "Game";
 
 	private JFrame frame;
 
@@ -70,7 +70,7 @@ public class Game extends Canvas implements Runnable {
 	
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("res/sprite_sheet.png"));
 		input = new InputHandler(this);
-		level = new Level(64, 64);
+		level = new Level("res/levels/level2.png");
 		player = new Player(level, 0, 0, input);
 		level.addEntity(player);
 	}
