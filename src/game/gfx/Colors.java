@@ -1,4 +1,4 @@
-package gfx;
+package game.gfx;
 
 public class Colors {
 
