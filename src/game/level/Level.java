@@ -9,7 +9,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import game.InputHandler;
 import game.entities.Entity;
+import game.entities.Player;
 import game.gfx.Screen;
 import game.level.tiles.Tile;
 
@@ -21,8 +23,9 @@ public class Level {
     public List<Entity> entities = new ArrayList<Entity>();
     private String imagePath;
     private BufferedImage image;
+	public Player player;
 
-    public Level(String imagePath) {
+    public Level(String imagePath, InputHandler input) {
         if (imagePath != null) {
             this.imagePath = imagePath;
             this.loadLevelFromFile();
@@ -32,6 +35,9 @@ public class Level {
             tiles = new byte[width * height];
             this.generateLevel();
         }
+        
+		player = new Player(this, 0, 0, input);
+		addEntity(player);
     }
 
     private void loadLevelFromFile() {
@@ -40,7 +46,7 @@ public class Level {
             this.width = image.getWidth();
             this.height = image.getHeight();
             tiles = new byte[width * height];
-            this.loadTiles();
+            this.loadTiles();            
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

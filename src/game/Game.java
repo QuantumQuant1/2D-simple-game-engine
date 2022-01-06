@@ -10,7 +10,6 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
-import game.entities.Player;
 import game.gfx.Screen;
 import game.gfx.SpriteSheet;
 import game.level.Level;
@@ -34,7 +33,8 @@ public class Game extends Canvas implements Runnable {
 	private Screen screen;
 	public InputHandler input;
 	public Level level;
-	public Player player;
+
+	public boolean levelLoaded = false;
 
 	public Game() {
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -70,9 +70,12 @@ public class Game extends Canvas implements Runnable {
 	
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("res/sprite_sheet.png"));
 		input = new InputHandler(this);
-		level = new Level("res/levels/level2.png");
-		player = new Player(level, 0, 0, input);
-		level.addEntity(player);
+		loadLevel(2);
+	}
+
+	public void loadLevel(int levelNum) {
+		level = new Level("res/levels/level" + levelNum + ".png", input);
+		levelLoaded = true;
 	}
 
 	public synchronized void start() {
@@ -132,7 +135,7 @@ public class Game extends Canvas implements Runnable {
 
 	public void tick() {
 		tickCount++;
-		level.tick();
+		if (levelLoaded) level.tick();
 	}
 
 	public void render() {
@@ -142,11 +145,13 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 
-		int xOffset = player.x - (screen.width / 2);
-		int yOffset = player.y - (screen.height / 2);
+		if (levelLoaded) {
+			int xOffset = level.player.x - (screen.width / 2);
+			int yOffset = level.player.y - (screen.height / 2);
 
-		level.renderTiles(screen, xOffset, yOffset);
-		level.renderEntities(screen);
+			level.renderTiles(screen, xOffset, yOffset);
+			level.renderEntities(screen);	
+		}
 
 		for (int y = 0; y < screen.height; y++) {
 			for (int x = 0; x < screen.width; x++) {
